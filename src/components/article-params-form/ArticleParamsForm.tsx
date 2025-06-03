@@ -15,6 +15,7 @@ import {
 	fontFamilyOptions,
 	fontSizeOptions,
 	OptionType,
+	defaultArticleState,
 } from 'src/constants/articleProps';
 import { useState, useRef } from 'react';
 import { useOutsideClickClose } from 'src/ui/select/hooks/useOutsideClickClose';
@@ -28,7 +29,7 @@ export const ArticleParamsForm = ({
 	presentArticleState,
 	setPresentArticleState,
 }: ArticleParamsFormProps) => {
-	const [isOpen, setIsOpen] = useState<boolean>(false);
+	const [isFormOpen, setisFormOpen] = useState<boolean>(false);
 	const rootRef = useRef<HTMLDivElement>(null);
 	const [chooseArticleState, setChooseArticleState] =
 		useState<ArticleStateType>(presentArticleState);
@@ -38,30 +39,31 @@ export const ArticleParamsForm = ({
 	};
 
 	useOutsideClickClose({
-		isOpen,
+		isOpen: isFormOpen,
 		rootRef,
-		onClose: () => setIsOpen(false),
-		onChange: setIsOpen,
+		onClose: () => setisFormOpen(false),
+		onChange: setisFormOpen,
 		event: 'mousedown',
 	});
 
-	const onCancel = () => {
-		setChooseArticleState(presentArticleState);
-		setIsOpen;
+	const handleReset = () => {
+		setChooseArticleState(defaultArticleState);
+		setPresentArticleState(defaultArticleState);
 	};
 
 	return (
 		<>
-			<ArrowButton isOpen={isOpen} onClick={setIsOpen} />
+			<ArrowButton isOpen={isFormOpen} onClick={setisFormOpen} />
 			<aside
 				ref={rootRef}
-				className={clsx(styles.container, isOpen && styles.container_open)}>
+				className={clsx(styles.container, isFormOpen && styles.container_open)}>
 				<form
 					className={styles.form}
 					onSubmit={(event) => {
 						event.preventDefault();
 						setPresentArticleState(chooseArticleState);
-					}}>
+					}}
+					onReset={handleReset}>
 					<Text as='h2' size={31} weight={800} family='open-sans' uppercase>
 						Задайте параметры
 					</Text>
@@ -98,12 +100,7 @@ export const ArticleParamsForm = ({
 						title='Ширина контента'
 					/>
 					<div className={styles.bottomContainer}>
-						<Button
-							title='Сбросить'
-							htmlType='reset'
-							type='clear'
-							onClick={onCancel}
-						/>
+						<Button title='Сбросить' htmlType='reset' type='clear' />
 						<Button title='Применить' htmlType='submit' type='apply' />
 					</div>
 				</form>
