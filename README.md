@@ -46,8 +46,8 @@ const updateBlogStyles = (settings: BlogSettings) => {
 ### Запуск проекта
 ```bash
 # Клонирование репозитория
-git clone [URL-репозитория]
-cd [название-проекта]
+git clone https://github.com/hazar84/blog-customizer.git
+cd blog-customizer
 
 # Установка зависимостей
 npm install
